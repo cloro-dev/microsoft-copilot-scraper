@@ -1,6 +1,6 @@
 # Microsoft Copilot Scraper
 
-[![Copilot scraper by cloro](https://github.com/cloro-dev/copilot-scraper/blob/main/copilot-scraper-hero-image.png)](https://cloro.dev/copilot/?utm_source=github)
+[![Copilot scraper by cloro](https://github.com/cloro-dev/microsoft-copilot-scraper/blob/main/copilot-scraper-hero-image.png)](https://cloro.dev/copilot/?utm_source=github)
 
 [![cloro](https://img.shields.io/badge/Powered%20by-Cloro-blue?style=for-the-badge)](https://cloro.dev/)
 
