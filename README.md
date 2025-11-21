@@ -1,10 +1,10 @@
 # Microsoft Copilot Scraper
 
-[![Copilot scraper by cloro](https://github.com/cloro-dev/microsoft-copilot-scraper/blob/main/copilot-scraper-hero-image.png)](https://cloro.dev/copilot/?utm_source=github)
+[![Microsoft Copilot scraper by cloro](https://github.com/cloro-dev/microsoft-copilot-scraper/blob/main/copilot-scraper-hero-image.png)](https://cloro.dev/copilot/?utm_source=github.com)
 
-[![cloro](https://img.shields.io/badge/Powered%20by-Cloro-blue?style=for-the-badge)](https://cloro.dev/)
+[![cloro](https://img.shields.io/badge/Powered%20by-cloro-blue?style=for-the-badge)](https://cloro.dev/)
 
-The [Copilot Scraper](https://cloro.dev/copilot/) by cloro enables developers to programmatically interact with Microsoft Copilot and automatically collect AI-powered responses along with structured metadata. Instead of manual data collection, you can retrieve results as parsed JSON, raw HTML, or other formats for seamless integration into your workflows.
+The [Microsoft Copilot Scraper](https://cloro.dev/copilot/) by cloro enables developers to programmatically interact with Microsoft Copilot and automatically collect AI-powered responses along with structured metadata. Instead of manual data collection, you can retrieve results as parsed JSON, raw HTML, or other formats for seamless integration into your workflows.
 
 You can use cloro's Copilot Scraper for development tools integration, Microsoft ecosystem research, and enterprise-focused queries. It handles dynamic AI-generated content, supports real-time extraction, and eliminates the need to manage authentication, sessions, or anti-bot systems.
 
@@ -92,6 +92,7 @@ axios
 | `prompt`\*         | The question or prompt to ask Copilot (1-10,000 characters)                 | –             |
 | `country`          | Optional country/region code for localized results (e.g., `US`, `GB`, `DE`) | `US`          |
 | `include.markdown` | Include response in Markdown format when set to true                        | `false`       |
+| `include.html`     | Include URL to full HTML response when set to true (URL expires after 48h)  | `false`       |
 
 \* Mandatory parameters
 
@@ -122,7 +123,7 @@ The Copilot Scraper API returns a structured JSON object containing Copilot's AI
         "description": "Industry best practices for maximizing team productivity with Microsoft tools..."
       }
     ],
-    "html": "<div>To improve team productivity using Microsoft 365 tools...</div>",
+    "html": "https://storage.cloro.dev/results/c45a5081-808d-4ed3-9c86-e4baf16c8ab8/page-1.html", // URL expires after 48 hours
     "markdown": "**To improve team productivity using Microsoft 365 tools**, I recommend implementing the following strategies..."
   }
 }
@@ -200,10 +201,19 @@ For detailed documentation, advanced features, and integration guides, visit:
 - **API documentation:** [docs.cloro.dev](https://docs.cloro.dev)
 - **Copilot scraper page:** [cloro.dev/copilot](https://cloro.dev/copilot/)
 
+## Other available scrapers
+
+- **[AI Mode](https://cloro.dev/ai-mode/)** - Extracts structured data from Google AI Mode for general knowledge queries, workflow optimization, and technical guidance.
+- **[AI Overview](https://cloro.dev/ai-overview/)** - Extracts structured data from Google AI Overview for comprehensive search result analysis and AI-curated insights.
+- **[ChatGPT](https://cloro.dev/chatgpt/)** - Extracts structured data from ChatGPT with advanced features including shopping cards, raw response data, and query fan-out.
+- **[Copilot](https://cloro.dev/copilot/)** - Extracts structured data from Microsoft Copilot for development tools, Microsoft ecosystem research, and enterprise-focused queries.
+- **[Google](https://cloro.dev/google-search/)** - Extracts structured data from Google Search results, including organic results, People Also Ask questions, related searches, and optional AI Overview data.
+- **[Perplexity](https://cloro.dev/perplexity/)** - Extracts comprehensive structured data from Perplexity AI with real-time web sources, automatically detecting and extracting rich data objects.
+
 ## Contact us
 
 If you have questions or need support, reach out to us on [our contact page](https://cloro.dev/contact).
 
 ---
 
-_Built with ❤️ by the cloro team_
+Built with ❤️ by the cloro team
