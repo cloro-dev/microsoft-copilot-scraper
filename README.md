@@ -1,6 +1,6 @@
 # Microsoft Copilot Scraper
 
-[![Microsoft Copilot scraper by cloro](https://github.com/cloro-dev/microsoft-copilot-scraper/blob/main/copilot-scraper-hero-image.png)](https://cloro.dev/copilot/?utm_source=github.com)
+[![Microsoft Copilot scraper by cloro](https://github.com/cloro-dev/microsoft-copilot-scraper/blob/main/copilot-scraper-hero-image.png)](https://cloro.dev/copilot/?utm_source=github)
 
 [![cloro](https://img.shields.io/badge/Powered%20by-cloro-blue?style=for-the-badge)](https://cloro.dev/)
 
@@ -23,7 +23,8 @@ payload = {
     'prompt': 'How can I improve team productivity using Microsoft 365 tools?',
     'country': 'US',
     'include': {
-        'markdown': True
+        'markdown': True,
+        'rawResponse': True
     }
 }
 
@@ -52,7 +53,8 @@ curl -X POST https://api.cloro.dev/v1/monitor/copilot \
     "prompt": "How can I improve team productivity using Microsoft 365 tools?",
     "country": "US",
     "include": {
-      "markdown": true
+      "markdown": true,
+      "rawResponse": true
     }
   }'
 ```
@@ -67,6 +69,7 @@ const payload = {
   country: "US",
   include: {
     markdown: true,
+    rawResponse: true,
   },
 };
 
@@ -87,12 +90,13 @@ axios
 
 ### Request parameters
 
-| Parameter          | Description                                                                 | Default value |
-| ------------------ | --------------------------------------------------------------------------- | ------------- |
-| `prompt`\*         | The question or prompt to ask Copilot (1-10,000 characters)                 | –             |
-| `country`          | Optional country/region code for localized results (e.g., `US`, `GB`, `DE`) | `US`          |
-| `include.markdown` | Include response in Markdown format when set to true                        | `false`       |
-| `include.html`     | Include URL to full HTML response when set to true (URL expires after 48h)  | `false`       |
+| Parameter             | Description                                                                 | Default value |
+| --------------------- | --------------------------------------------------------------------------- | ------------- |
+| `prompt`\*            | The question or prompt to ask Copilot (1-10,000 characters)                 | –             |
+| `country`             | Optional country/region code for localized results (e.g., `US`, `GB`, `DE`) | `US`          |
+| `include.markdown`    | Include response in Markdown format when set to true                        | `false`       |
+| `include.html`        | Include URL to full HTML response when set to true (URL expires after 24h)  | `false`       |
+| `include.rawResponse` | Include raw streaming response events for debugging                         | `false`       |
 
 \* Mandatory parameters
 
@@ -123,8 +127,70 @@ The Copilot Scraper API returns a structured JSON object containing Copilot's AI
         "description": "Industry best practices for maximizing team productivity with Microsoft tools..."
       }
     ],
-    "html": "https://storage.cloro.dev/results/c45a5081-808d-4ed3-9c86-e4baf16c8ab8/page-1.html", // URL expires after 48 hours
-    "markdown": "**To improve team productivity using Microsoft 365 tools**, I recommend implementing the following strategies..."
+    "shoppingCards": [
+      {
+        "type": "shoppingProducts",
+        "layout": "Carousel",
+        "products": [
+          {
+            "product": {
+              "id": "prod_456",
+              "groupId": "group_456"
+            },
+            "offerId": "offer_456",
+            "url": "https://example.com/surface-pro-9",
+            "name": "Microsoft Surface Pro 9",
+            "description": "Powerful 2-in-1 tablet for professional productivity",
+            "images": [
+              {
+                "title": "Surface Pro 9 front view",
+                "url": "https://example.com/surface.jpg"
+              }
+            ],
+            "specifications": [
+              {
+                "displayName": "Color",
+                "values": ["Platinum", "Graphite", "Sapphire"]
+              },
+              {
+                "displayName": "Storage",
+                "values": ["256GB", "512GB", "1TB"]
+              }
+            ],
+            "tags": ["tablet", "2-in-1", "professional"],
+            "price": {
+              "amount": 999.0,
+              "currency": "USD",
+              "currencySymbol": "$"
+            },
+            "seller": "Microsoft Store",
+            "sellerLogoUrl": "https://example.com/microsoft-logo.png",
+            "brandName": "Microsoft",
+            "rating": {
+              "value": 4.7,
+              "count": 542
+            },
+            "canTrackPrice": true
+          }
+        ]
+      }
+    ],
+    "html": "https://storage.cloro.dev/results/c45a5081-808d-4ed3-9c86-e4baf16c8ab8/page-1.html", // URL expires after 24 hours
+    "markdown": "**To improve team productivity using Microsoft 365 tools**, I recommend implementing the following strategies...",
+    "rawResponse": [
+      {
+        "type": "text",
+        "text": "To improve team productivity using Microsoft 365 tools..."
+      },
+      {
+        "type": "source",
+        "data": {
+          "url": "https://docs.microsoft.com/en-us/microsoft-365/",
+          "title": "Microsoft 365 Documentation"
+        }
+      }
+      // ... additional WebSocket events
+    ]
   }
 }
 ```
@@ -150,6 +216,29 @@ Each source in the `result.sources` array contains:
 | `url`         | string  | Direct URL to the source content              |
 | `label`       | string  | Source name or publication                    |
 | `description` | string  | Brief description of what the source contains |
+
+## Shopping cards
+
+One of the unique features of cloro's Copilot scraper is automatic extraction of shopping cards when Copilot returns product or commercial information. No additional parameters are required - shopping cards are included by default when available in the response.
+
+### Shopping card features
+
+- **Comprehensive product data**: Each shopping card includes detailed product information with identifiers, URLs, names, descriptions, and specifications
+- **Product images**: Multiple images with titles for each product
+- **Specifications**: Detailed product specifications like Color, Size, and other attributes with available values
+- **Pricing information**: Structured price data with amount, currency code, and currency symbol
+- **Ratings**: Product ratings with review counts
+- **Seller information**: Seller name and logo for brand recognition
+- **Product variants**: Track different configurations through specifications
+- **Price tracking**: Know which products support price tracking functionality
+
+### Use cases for shopping cards
+
+- **E-commerce monitoring**: Track how Copilot surfaces and recommends Microsoft products and services
+- **Product catalog building**: Extract structured product data for building product databases
+- **Competitive analysis**: Monitor Microsoft hardware pricing and specifications across different regions
+- **Inventory tracking**: Monitor product availability and specifications for Microsoft ecosystem products
+- **Marketing intelligence**: Understand which products Copilot highlights in responses
 
 ## Practical Copilot scraper use cases
 
@@ -198,22 +287,24 @@ Copilot excels at questions related to Microsoft products, development tools, en
 
 For detailed documentation, advanced features, and integration guides, visit:
 
-- **API documentation:** [docs.cloro.dev](https://docs.cloro.dev)
+- **API documentation:** [docs.cloro.dev](https://docs.cloro.dev/)
 - **Copilot scraper page:** [cloro.dev/copilot](https://cloro.dev/copilot/)
 
 ## Other available scrapers
 
 - **[AI Mode](https://cloro.dev/ai-mode/)** - Extracts structured data from Google AI Mode for general knowledge queries, workflow optimization, and technical guidance.
 - **[AI Overview](https://cloro.dev/ai-overview/)** - Extracts structured data from Google AI Overview for comprehensive search result analysis and AI-curated insights.
-- **[Gemini](https://cloro.dev/gemini/)** - Extracts structured data from Google Gemini for complex reasoning, content generation, and source confidence scoring.
 - **[ChatGPT](https://cloro.dev/chatgpt/)** - Extracts structured data from ChatGPT with advanced features including shopping cards, raw response data, and query fan-out.
-- **[Copilot](https://cloro.dev/copilot/)** - Extracts structured data from Microsoft Copilot for development tools, Microsoft ecosystem research, and enterprise-focused queries.
-- **[Google](https://cloro.dev/google-search/)** - Extracts structured data from Google Search results, including organic results, People Also Ask questions, related searches, and optional AI Overview data.
+- **[Copilot](https://cloro.dev/copilot/)** - Extracts structured data from Microsoft Copilot with sources and shopping cards.
+- **[Gemini](https://cloro.dev/gemini/)** - Extracts structured data from Google Gemini for complex reasoning, content generation, and source confidence scoring.
+- **[Google Search](https://cloro.dev/google-search/)** - Extracts structured data from Google Search results, including organic results, People Also Ask questions, related searches, and optional AI Overview data.
+- **[Google News](https://cloro.dev/google-news/)** - Extracts structured news articles from Google News with titles, snippets, sources, dates, and thumbnail images for news monitoring and media tracking.
+- **[Grok](https://cloro.dev/grok/)** - Extracts structured data from Grok for current events, news tracking, and real-time information gathering.
 - **[Perplexity](https://cloro.dev/perplexity/)** - Extracts comprehensive structured data from Perplexity AI with real-time web sources, automatically detecting and extracting rich data objects.
 
 ## Contact us
 
-If you have questions or need support, reach out to us on [our contact page](https://cloro.dev/contact).
+If you have questions or need support, reach out to us at [support@cloro.dev](mailto:support@cloro.dev).
 
 ---
 
