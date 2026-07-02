@@ -4,9 +4,9 @@
 
 [![cloro](https://img.shields.io/badge/Powered%20by-cloro-blue?style=for-the-badge)](https://cloro.dev/)
 
-The [Microsoft Copilot Scraper](https://cloro.dev/copilot/) by cloro enables developers to programmatically interact with Microsoft Copilot and automatically collect AI-powered responses along with structured metadata. Instead of manual data collection, you can retrieve results as parsed JSON, raw HTML, or other formats for seamless integration into your workflows.
+The [Microsoft Copilot Scraper](https://cloro.dev/copilot/) by cloro lets developers programmatically interact with Microsoft Copilot and collect AI-powered responses along with structured metadata. Instead of manual data collection, you can retrieve results as parsed JSON, raw HTML, or other formats for integration into your workflows.
 
-You can use cloro's Copilot Scraper for development tools integration, Microsoft ecosystem research, and enterprise-focused queries. It handles dynamic AI-generated content, supports real-time extraction, and eliminates the need to manage authentication, sessions, or anti-bot systems.
+You can use cloro's Copilot Scraper for development tools integration, Microsoft ecosystem research, and enterprise-focused queries. It handles dynamic AI-generated content, supports real-time extraction, and removes the need to manage authentication, sessions, or anti-bot systems.
 
 ## How it works
 
@@ -94,6 +94,7 @@ axios
 | --------------------- | --------------------------------------------------------------------------- | ------------- |
 | `prompt`\*            | The question or prompt to ask Copilot (1-10,000 characters)                 | –             |
 | `country`             | Optional country/region code for localized results (e.g., `US`, `GB`, `DE`) | `US`          |
+| `state`               | Optional US state code for state-level geo-targeting (e.g., `CA`, `TX`, `NY`). Only valid when `country` is `US`. See [supported codes](https://api.cloro.dev/v1/states?country=US). | –             |
 | `include.markdown`    | Include response in Markdown format when set to true                        | `false`       |
 | `include.html`        | Include URL to full HTML response when set to true (URL expires after 24h)  | `false`       |
 | `include.rawResponse` | Include raw streaming response events for debugging                         | `false`       |
@@ -197,14 +198,14 @@ The Copilot Scraper API returns a structured JSON object containing Copilot's AI
 
 ## Microsoft ecosystem integration
 
-Copilot provides deep integration with the Microsoft ecosystem, offering specialized knowledge about Microsoft products, services, and best practices.
+Copilot integrates with the Microsoft ecosystem, with knowledge about Microsoft products, services, and best practices.
 
 ### Microsoft expertise features
 
-- **Microsoft 365 knowledge**: Comprehensive understanding of Office apps, Teams, SharePoint, and more
-- **Development tools**: Expertise in Visual Studio, Azure, and Microsoft development platforms
-- **Enterprise solutions**: Knowledge of enterprise-grade Microsoft services and deployment strategies
-- **Best practices**: Industry-standard approaches for Microsoft tool implementation and optimization
+- **Microsoft 365 knowledge**: Coverage of Office apps, Teams, SharePoint, and more
+- **Development tools**: Visual Studio, Azure, and Microsoft development platforms
+- **Enterprise solutions**: Enterprise-grade Microsoft services and deployment strategies
+- **Best practices**: Common approaches for Microsoft tool implementation and optimization
 
 ### Sources array structure
 
@@ -217,20 +218,33 @@ Each source in the `result.sources` array contains:
 | `label`       | string  | Source name or publication                    |
 | `description` | string  | Brief description of what the source contains |
 
+### Citation pills array structure
+
+When the Copilot answer carries pill chips, the `result.citationPills` array exposes each cited source as a self-contained entry. When a pill cites N sources, the array contains N entries sharing the same `citationPillId` but with per-source `label`, `url`, and `domain`. Group by `citationPillId` to recover pill-level structure. The field is omitted when no pills are present.
+
+| Field            | Type    | Description                                                                                                                                                                                                  |
+| ---------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `label`          | string  | Per-source title from the citation event (e.g. `"Microsoft 365 Documentation"`). Always present; may be an empty string when the event ships no title — read `domain` / `url` for source identity in that case. |
+| `citationPillId` | integer | 1-based ordinal shared by all entries from the same chip.                                                         |
+| `url`            | string  | Direct URL of the cited source.                                                                                   |
+| `domain`         | string  | Host extracted from `url`, for grouping and display.                                                              |
+| `description`    | string  | Source snippet when present. Omitted when absent.                                                                 |
+| `position`       | integer | 1-based position of this source in the sibling `result.sources` array.                                            |
+
 ## Shopping cards
 
-One of the unique features of cloro's Copilot scraper is automatic extraction of shopping cards when Copilot returns product or commercial information. No additional parameters are required - shopping cards are included by default when available in the response.
+cloro's Copilot scraper extracts shopping cards automatically when Copilot returns product or commercial information. No additional parameters are required. Shopping cards are included by default when available in the response.
 
 ### Shopping card features
 
-- **Comprehensive product data**: Each shopping card includes detailed product information with identifiers, URLs, names, descriptions, and specifications
+- **Product data**: Each shopping card includes product information with identifiers, URLs, names, descriptions, and specifications
 - **Product images**: Multiple images with titles for each product
-- **Specifications**: Detailed product specifications like Color, Size, and other attributes with available values
+- **Specifications**: Product specifications like Color, Size, and other attributes with available values
 - **Pricing information**: Structured price data with amount, currency code, and currency symbol
 - **Ratings**: Product ratings with review counts
 - **Seller information**: Seller name and logo for brand recognition
 - **Product variants**: Track different configurations through specifications
-- **Price tracking**: Know which products support price tracking functionality
+- **Price tracking**: Know which products support price tracking
 
 ### Use cases for shopping cards
 
@@ -239,6 +253,104 @@ One of the unique features of cloro's Copilot scraper is automatic extraction of
 - **Competitive analysis**: Monitor Microsoft hardware pricing and specifications across different regions
 - **Inventory tracking**: Monitor product availability and specifications for Microsoft ecosystem products
 - **Marketing intelligence**: Understand which products Copilot highlights in responses
+
+## Business and location data (Map entries)
+
+When Copilot returns business or place information (restaurants, stores, attractions, etc.), cloro automatically extracts business data from Copilot's local entity data (primarily Google). No additional parameters are required. Map entries are included by default when available in the response.
+
+**Example response with map entries:**
+
+```json
+{
+  "success": true,
+  "result": {
+    "text": "Yes — the Smoky Mountains have several family-friendly theme parks...",
+    "map": [
+      {
+        "name": "WonderWorks Pigeon Forge",
+        "position": 1,
+        "placeId": "ChIJEYpTsk__W4gR2sQLGzOjE3o",
+        "location": {
+          "address": "100 Music Rd, Pigeon Forge, TN 37863",
+          "latitude": 35.823257,
+          "longitude": -83.5787498
+        },
+        "phoneNumber": "(865) 868-1800",
+        "url": "http://www.wonderworksonline.com/pigeon-forge/",
+        "reviews": [
+          {
+            "count": 10625,
+            "rating": 4.3,
+            "providerName": "Google",
+            "providerIconUrl": null,
+            "url": "https://maps.google.com/?cid=8796553937077126362"
+          }
+        ],
+        "photos": [
+          {
+            "url": "https://lh3.googleusercontent.com/gps-cs-s/example",
+            "altText": null,
+            "providerName": null,
+            "providerUrl": "https://maps.google.com"
+          }
+        ],
+        "openState": "Open · Closes 9 PM",
+        "category": "Amusement park",
+        "price": null,
+        "layerLabel": "Theme Parks"
+      },
+      {
+        "name": "Anakeesta",
+        "position": 2,
+        "placeId": "ChIJ0_BT8DxWWYgR4JxBzZpLjH4",
+        "location": {
+          "address": "576 Parkway, Gatlinburg, TN 37738",
+          "latitude": 35.713083,
+          "longitude": -83.5117751
+        },
+        "phoneNumber": "(865) 325-2400",
+        "url": "https://www.anakeesta.com/",
+        "reviews": [
+          {
+            "count": 15738,
+            "rating": 4.2,
+            "providerName": "Google",
+            "providerIconUrl": null,
+            "url": "https://maps.google.com/?cid=9118746473759087840"
+          }
+        ],
+        "photos": [
+          {
+            "url": "https://lh3.googleusercontent.com/gps-cs-s/example",
+            "altText": null,
+            "providerName": null,
+            "providerUrl": "https://maps.google.com"
+          }
+        ],
+        "openState": "Open · Closes 8 PM",
+        "category": "Theme park",
+        "price": null,
+        "layerLabel": "Theme Parks"
+      }
+    ]
+  }
+}
+```
+
+### Map entry features
+
+- **Nested location data:** Each map entry includes a `location` object with `address`, `latitude`, and `longitude`, plus a Google Place ID (`placeId`)
+- **Multi-provider reviews:** Review aggregations in a `reviews` array with `count`, `rating`, `providerName`, and review page `url`
+- **Business photos:** A `photos` array with `url`, `altText`, `providerName`, and `providerUrl` for each photo
+- **Live status:** `openState` field shows current open/closed status (e.g. "Open · Closes 9 PM")
+- **Categorization:** `category` and `layerLabel` fields for business type and map layer grouping
+
+### Use cases for map entries
+
+- **Local business monitoring:** Track how Copilot surfaces and recommends businesses in different regions
+- **Location intelligence:** Extract structured location data with coordinates for mapping and geospatial analysis
+- **Competitive analysis:** Monitor which businesses Copilot highlights for location-based queries
+- **Directory building:** Build business directories from Copilot's Google-sourced location data
 
 ## Practical Copilot scraper use cases
 
@@ -251,10 +363,10 @@ One of the unique features of cloro's Copilot scraper is automatic extraction of
 
 ## Why choose cloro?
 
-- **Simple integration:** Clean API design with comprehensive documentation and examples.
+- **Simple integration:** API design with documentation and examples.
 - **Reliable performance:** >99% uptime and low latencies (P50 < 30s, P90 < 60s)
 - **No infrastructure hassle:** We handle rate limiting and browser management.
-- **Microsoft expertise:** Access to Copilot's specialized knowledge of the Microsoft ecosystem.
+- **Microsoft expertise:** Access to Copilot's knowledge of the Microsoft ecosystem.
 - **Developer support:** Responsive support team to help with integration and troubleshooting.
 
 ## FAQ
@@ -268,7 +380,7 @@ Any website is legal to be scraped as long as the information is publicly access
 cloro's Copilot endpoint provides reliable access to Microsoft Copilot's AI assistance with:
 
 - **Microsoft ecosystem expertise** for development tools and enterprise solutions
-- **Structured data extraction** for seamless integration into your workflows
+- **Structured data extraction** for integration into your workflows
 - **Real-time assistance** for Microsoft product questions and optimization
 
 ### What's the recommended timeout for requests?
@@ -281,26 +393,26 @@ Yes, you can specify country codes like `US`, `GB`, `DE`, `JP`, `CN`, `IN`, `BR`
 
 ### What kind of questions work best with Copilot?
 
-Copilot excels at questions related to Microsoft products, development tools, enterprise solutions, technical guidance, and workflow optimization within the Microsoft ecosystem.
+Copilot works well for questions related to Microsoft products, development tools, enterprise solutions, technical guidance, and workflow optimization within the Microsoft ecosystem.
 
 ## Learn more
 
 For detailed documentation, advanced features, and integration guides, visit:
 
-- **API documentation:** [docs.cloro.dev](https://docs.cloro.dev/)
+- **API documentation:** [cloro.dev/docs](https://cloro.dev/docs/)
 - **Copilot scraper page:** [cloro.dev/copilot](https://cloro.dev/copilot/)
 
 ## Other available scrapers
 
 - **[AI Mode](https://cloro.dev/ai-mode/)** - Extracts structured data from Google AI Mode for general knowledge queries, workflow optimization, and technical guidance.
-- **[AI Overview](https://cloro.dev/ai-overview/)** - Extracts structured data from Google AI Overview for comprehensive search result analysis and AI-curated insights.
-- **[ChatGPT](https://cloro.dev/chatgpt/)** - Extracts structured data from ChatGPT with advanced features including shopping cards, raw response data, and query fan-out.
-- **[Copilot](https://cloro.dev/copilot/)** - Extracts structured data from Microsoft Copilot with sources and shopping cards.
+- **[AI Overview](https://cloro.dev/ai-overview/)** - Extracts structured data from Google AI Overview for search result analysis and AI-curated insights.
+- **[ChatGPT](https://cloro.dev/chatgpt/)** - Extracts structured data from ChatGPT with features including shopping cards, raw response data, and query fan-out.
+- **[Copilot](https://cloro.dev/copilot/)** - Extracts structured data from Microsoft Copilot with sources, shopping cards, and map entries.
 - **[Gemini](https://cloro.dev/gemini/)** - Extracts structured data from Google Gemini for complex reasoning, content generation, and source confidence scoring.
 - **[Google Search](https://cloro.dev/google-search/)** - Extracts structured data from Google Search results, including organic results, People Also Ask questions, related searches, and optional AI Overview data.
 - **[Google News](https://cloro.dev/google-news/)** - Extracts structured news articles from Google News with titles, snippets, sources, dates, and thumbnail images for news monitoring and media tracking.
 - **[Grok](https://cloro.dev/grok/)** - Extracts structured data from Grok for current events, news tracking, and real-time information gathering.
-- **[Perplexity](https://cloro.dev/perplexity/)** - Extracts comprehensive structured data from Perplexity AI with real-time web sources, automatically detecting and extracting rich data objects.
+- **[Perplexity](https://cloro.dev/perplexity/)** - Extracts structured data from Perplexity AI with real-time web sources, automatically detecting and extracting data objects.
 
 ## Contact us
 
