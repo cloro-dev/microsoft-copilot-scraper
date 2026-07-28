@@ -1,12 +1,28 @@
-# Microsoft Copilot Scraper
+# Microsoft Copilot Scraper API — Bing-Grounded Responses & Sources
 
 [![Microsoft Copilot scraper by cloro](https://github.com/cloro-dev/microsoft-copilot-scraper/blob/main/copilot-scraper-hero-image.png)](https://cloro.dev/copilot/?utm_source=github)
 
 [![cloro](https://img.shields.io/badge/Powered%20by-cloro-blue?style=for-the-badge)](https://cloro.dev/)
 
-The [Microsoft Copilot Scraper](https://cloro.dev/copilot/) by cloro lets developers programmatically interact with Microsoft Copilot and collect AI-powered responses along with structured metadata. Instead of manual data collection, you can retrieve results as parsed JSON, raw HTML, or other formats for integration into your workflows.
+Scrape Microsoft Copilot responses via API. Returns parsed JSON with the full Bing-grounded response text and markdown, **citation pills**, source attribution, and Copilot's internal reasoning. Python, cURL, and Node.js examples below.
 
-You can use cloro's Copilot Scraper for development tools integration, Microsoft ecosystem research, and enterprise-focused queries. It handles dynamic AI-generated content, supports real-time extraction, and removes the need to manage authentication, sessions, or anti-bot systems.
+Built for developers doing AI brand monitoring in the Microsoft ecosystem, Bing-grounded source research, enterprise-AI competitive analysis, and content generation at scale — without managing CAPTCHAs, rotating proxies, session state, or Microsoft's anti-bot defenses.
+
+## Quick start
+
+1. Get an API key at [cloro.dev](https://cloro.dev/?utm_source=github&utm_medium=readme).
+2. Send a request:
+
+   ```bash
+   curl -X POST https://api.cloro.dev/v1/monitor/copilot \
+     -H "Authorization: Bearer YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{"prompt": "Compare Azure OpenAI vs OpenAI API for enterprise deployment"}'
+   ```
+
+3. Parse the returned JSON — `result.text`, `result.markdown`, `result.citationPills[]`.
+
+Full examples in Python, cURL, and Node.js below.
 
 ## How it works
 
@@ -416,7 +432,7 @@ For detailed documentation, advanced features, and integration guides, visit:
 
 ## Contact us
 
-If you have questions or need support, reach out to us at [support@cloro.dev](mailto:support@cloro.dev).
+If you have questions or need support, join our community at [r/cloroapi](https://www.reddit.com/r/cloroapi/).
 
 ---
 
