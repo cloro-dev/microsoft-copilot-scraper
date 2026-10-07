@@ -50,7 +50,7 @@ Node.js and async/webhook examples are in the [endpoint documentation](https://c
 | Parameter | Description | Default |
 | --- | --- | --- |
 | `prompt`\* | The query or question (1-10,000 characters) | – |
-| `country` | Country code for localized results (`US`, `GB`, `DE`) | `US` |
+| `country`\* | Country code for localized results (`US`, `GB`, `DE`) | – |
 | `state` | US state code for finer localization | – |
 | `include.markdown` | Return the answer as Markdown | `false` |
 | `include.html` | Return a URL to the full HTML (expires after 24h) | `false` |
@@ -68,7 +68,6 @@ Node.js and async/webhook examples are in the [endpoint documentation](https://c
     "sources": [
       { "position": 1, "url": "https://example.com/crm-guide", "label": "Example CRM Guide", "description": "Comparison of B2B CRM platforms..." }
     ],
-    "shoppingCards": [{ "title": "CRM Starter Plan", "price": { "value": 29.0, "currency": "$" }, "store": "Example" }],
     "markdown": "For B2B sales teams, the most commonly recommended options are..."
   }
 }
@@ -77,10 +76,11 @@ Node.js and async/webhook examples are in the [endpoint documentation](https://c
 Alongside `text` and `markdown`:
 
 1. **`sources`** — every cited URL with position, label and description, grounded in Bing's index.
-2. **`shoppingCards`** — product cards with price, store, rating and reviews.
-3. **`map`** — business and location entries with rating, reviews, address and operating status.
-4. **`citationPills`** — inline citation chips where present.
-5. **`rawResponse`** — the unparsed upstream payload.
+2. **`searchQueries`** — the web searches Copilot ran to build the answer, returned whenever there are any, at no extra cost.
+3. **`shoppingCards`** — product carousels, each grouping `products[]` with name, price, seller and rating ([schema](https://cloro.dev/docs/api-reference/endpoint/copilot/shopping-cards)).
+4. **`map`** — business and location entries with rating, reviews, address and operating status.
+5. **`citationPills`** — inline citation chips where present.
+6. **`rawResponse`** — the unparsed upstream payload.
 
 Full field-level schemas are in the [endpoint reference](https://cloro.dev/docs/api-reference/endpoint/monitor-copilot).
 
@@ -107,7 +107,7 @@ cloro reads publicly visible responses. Check your own jurisdiction and terms.
 
 ### What is the recommended timeout?
 
-60 seconds. Copilot streams its answer like the other AI surfaces.
+At least 5 minutes (300 seconds), because cloro retries failed attempts server-side before it answers ([retries and cancellation](https://cloro.dev/docs/guides/error-handling#retries-and-cancellation)).
 
 ## Learn more
 
@@ -120,4 +120,4 @@ cloro reads publicly visible responses. Check your own jurisdiction and terms.
 
 ## Contact us
 
-Questions or support: [r/cloroapi](https://www.reddit.com/r/cloroapi/).
+Questions or support: [ask the docs AI assistant](https://cloro.dev/docs/?assistant).
