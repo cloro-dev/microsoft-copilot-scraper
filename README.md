@@ -4,7 +4,7 @@
 
 [![cloro](https://img.shields.io/badge/Powered%20by-cloro-blue?style=for-the-badge)](https://cloro.dev/)
 
-The [Microsoft Copilot scraper](https://cloro.dev/copilot/?utm_source=github) by cloro returns Copilot's Bing-grounded answers as structured JSON: answer text and markdown, every cited source, shopping cards and business entries.
+The [Microsoft Copilot scraper](https://cloro.dev/copilot/?utm_source=github) by cloro is an API for Microsoft Copilot answers. It returns Copilot's Bing-grounded answers as structured JSON: answer text and markdown, every cited source, the web searches Copilot ran, shopping cards and business entries.
 
 ## How do you scrape Microsoft Copilot?
 
@@ -75,21 +75,21 @@ Node.js and async/webhook examples are in the [endpoint documentation](https://c
 
 Alongside `text` and `markdown`:
 
-1. **`sources`** — every cited URL with position, label and description, grounded in Bing's index.
-2. **`searchQueries`** — the web searches Copilot ran to build the answer, returned whenever there are any, at no extra cost.
-3. **`shoppingCards`** — product carousels, each grouping `products[]` with name, price, seller and rating ([schema](https://cloro.dev/docs/api-reference/endpoint/copilot/shopping-cards)).
-4. **`map`** — business and location entries with rating, reviews, address and operating status.
-5. **`citationPills`** — inline citation chips where present.
-6. **`rawResponse`** — the unparsed upstream payload.
+1. **`sources`**: every cited URL with position, label and description, grounded in Bing's index.
+2. **`searchQueries`**: the web searches Copilot ran to build the answer, returned whenever there are any, at no extra cost.
+3. **`shoppingCards`**: product carousels, each grouping `products[]` with name, price, seller and rating ([schema](https://cloro.dev/docs/api-reference/endpoint/copilot/shopping-cards)).
+4. **`map`**: business and location entries with rating, reviews, address and operating status.
+5. **`citationPills`**: inline citation chips where present.
+6. **`rawResponse`**: the unparsed upstream payload.
 
 Full field-level schemas are in the [endpoint reference](https://cloro.dev/docs/api-reference/endpoint/monitor-copilot).
 
 ## Use cases
 
-- **Cross-engine coverage** — the engine most visibility dashboards under-cover, so the cheapest place to find a gap.
-- **Enterprise and Microsoft-ecosystem queries** — Copilot skews toward these, and answers there differ from consumer surfaces.
-- **Brand monitoring** — whether Copilot names you on the prompts your buyers ask.
-- **Bing-index research** — Copilot's grounding makes it a readable proxy for what Bing surfaces.
+- **Cross-engine coverage**: the engine most visibility dashboards under-cover, so the cheapest place to find a gap.
+- **Enterprise and Microsoft-ecosystem queries**: Copilot skews toward these, and answers there differ from consumer surfaces.
+- **Brand monitoring**: whether Copilot names you on the prompts your buyers ask.
+- **Bing-index research**: Copilot's grounding makes it a readable proxy for what Bing surfaces.
 
 ## FAQ
 
