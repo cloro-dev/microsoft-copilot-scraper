@@ -6,6 +6,8 @@
 
 The [Microsoft Copilot scraper](https://cloro.dev/copilot/?utm_source=github) by cloro is an API for Microsoft Copilot answers. It returns Copilot's Bing-grounded answers as structured JSON: answer text and markdown, every cited source, the web searches Copilot ran, shopping cards and business entries.
 
+> **Microsoft Copilot scraper is discontinued.** Copilot blocks access for logged-out sessions. Requests to `/v1/monitor/copilot` and async tasks with `taskType` `COPILOT` fail with a `400` (`MODEL_UNAVAILABLE`) and cost no credits. The [providers guide](https://cloro.dev/docs/guides/providers#unsupported-providers) has the details.
+
 ## How do you scrape Microsoft Copilot?
 
 1. Get an API key at [cloro.dev](https://cloro.dev/?utm_source=github&utm_medium=readme).
@@ -99,7 +101,7 @@ Different grounding. Copilot is Bing-backed, so on the same prompt it often cite
 
 ### Does cloro support Bing search directly?
 
-No. cloro covers Google Search, Google News, and the AI surfaces including Copilot. Bing's own search APIs were retired in August 2025.
+No. cloro covers Google Search, Google News, and AI surfaces such as ChatGPT, Gemini and Google AI Mode. Bing's own search APIs were retired in August 2025.
 
 ### Is scraping Copilot allowed?
 
@@ -116,7 +118,7 @@ At least 5 minutes (300 seconds), because cloro retries failed attempts server-s
 
 ## Other cloro scrapers
 
-[AI Mode](https://cloro.dev/ai-mode/) · [AI Overview](https://cloro.dev/ai-overview/) · [ChatGPT](https://cloro.dev/chatgpt/) · [Gemini](https://cloro.dev/gemini/) · [Google Search](https://cloro.dev/google-search/) · [Google News](https://cloro.dev/google-news/) · [Perplexity](https://cloro.dev/perplexity/)
+[AI Mode](https://cloro.dev/ai-mode/) · [AI Overview](https://cloro.dev/ai-overview/) · [ChatGPT](https://cloro.dev/chatgpt/) · [Gemini](https://cloro.dev/gemini/) · [Google Search](https://cloro.dev/google-search/) · [Google News](https://cloro.dev/google-news/)
 
 ## Contact us
 
