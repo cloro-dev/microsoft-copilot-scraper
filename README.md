@@ -101,7 +101,7 @@ Different grounding. Copilot is Bing-backed, so on the same prompt it often cite
 
 ### Does cloro support Bing search directly?
 
-No. cloro covers Google Search, Google News, and the AI surfaces including Copilot. Bing's own search APIs were retired in August 2025.
+No. cloro covers Google Search, Google News, and AI surfaces such as ChatGPT, Gemini and Google AI Mode. Bing's own search APIs were retired in August 2025.
 
 ### Is scraping Copilot allowed?
 
