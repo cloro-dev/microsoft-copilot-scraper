@@ -52,7 +52,7 @@ Node.js and async/webhook examples are in the [endpoint documentation](https://c
 | Parameter | Description | Default |
 | --- | --- | --- |
 | `prompt`\* | The question. Up to 3,500 characters after URL encoding, fewer for non-Latin scripts | – |
-| `country`\* | Country code (`US`, `GB`, `DE`). All countries except `BY`, `CN`, `IR`, `RU`, `SY` and `VE` | – |
+| `country`\* | Country code (`US`, `GB`, `DE`). All countries except `CN`, `KR` and `RU` | – |
 | `state` | US state code (`CA`, `NY`), only with `country: "US"` | – |
 | `include.markdown` | Return the answer as Markdown | `false` |
 | `include.html` | Return a URL to the page Bing rendered | `false` |
@@ -115,7 +115,7 @@ No. Microsoft retired the Bing Search APIs in August 2025, and the Microsoft 365
 
 ### Does cloro return Bing search results?
 
-No. cloro returns Bing's AI answer only, not Bing's organic, ads, news, image or video results.
+Yes, from a separate endpoint. `POST /v1/monitor/bing` returns the organic results and the ads of a Bing results page and, on request, the AI summary at the top of the page ([Bing Search reference](https://cloro.dev/docs/api-reference/endpoint/monitor-bing)). It does not return Bing's news, image or video results.
 
 ### What does a request cost?
 
